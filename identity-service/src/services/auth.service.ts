@@ -3,8 +3,8 @@ import { AppError } from "@/errors/app-error"
 import { IUserInputDTO } from "@/interfaces/IUser"
 import { logger } from "@/loaders/logger"
 import User from "@/models/user"
-import { convertToAppError } from "@/utils"
-import { generateTokens } from "@/utils/jwt"
+import { convertToAppError } from "@/lib/utils"
+import { generateTokens } from "@/lib/jwt"
 
 export default class AuthService {
   public async SignUp(userInputDTO: IUserInputDTO) {

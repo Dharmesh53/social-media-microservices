@@ -1,7 +1,7 @@
 import { HttpStatusCode } from "@/config";
 import { logger } from "@/loaders/logger";
 import AuthService from "@/services/auth.service";
-import { AppResponse, catchEmAll } from "@/utils";
+import { AppResponse, catchEmAll } from "@/lib/utils";
 import { Request, Response } from "express";
 
 const authService = new AuthService()

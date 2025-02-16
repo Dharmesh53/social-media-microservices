@@ -1,5 +1,5 @@
 import { logger } from "@/loaders/logger";
-import { catchEmAll } from "@/utils";
+import { catchEmAll } from "@/lib/utils";
 import { z } from "zod";
 
 export function validate(schema: z.ZodSchema) {

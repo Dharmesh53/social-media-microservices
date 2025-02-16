@@ -60,6 +60,7 @@ const createInfoFileTransport = () => {
 const logger = winston.createLogger({
   level: config.logs.level,
   levels: winston.config.npm.levels,
+  defaultMeta: { service: "identity-service" },
   transports: createTransports(),
   exceptionHandlers: [
     new winston.transports.File({ filename: 'logs/exceptions.log' }),

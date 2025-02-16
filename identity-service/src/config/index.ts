@@ -1,6 +1,4 @@
-import { AppError } from '@/errors/app-error';
 import dotenv from 'dotenv';
-import rateLimit from 'express-rate-limit';
 
 const envFound = dotenv.config();
 
@@ -22,24 +20,17 @@ const getenv = (key: string, defaultValue: string = '') => {
 
 export const config = {
   port: parseInt(getenv('PORT'), 10),
-
   databaseUrl: getenv('MONGODB_URI'),
-
+  redisUrl: getenv('REDIS_URL'),
   origins: getenv('ORIGINS').split(','),
-
   nodeEnv: getenv('NODE_ENV', 'development'),
-
-  maxRequests: 5,
-
   jwt: {
     secret: getenv('JWT_SECRET'),
     algorithm: getenv('JWT_ALGO'),
   },
-
   logs: {
     level: getenv('LOG_LEVEL', 'silly'),
   },
-
   api: {
     v1Prefix: '/api/v1',
   },
@@ -78,37 +69,4 @@ export enum CommanErrorsDict {
 export enum Env {
   DEV = 'development',
   PROD = 'production'
-}
-
-export const corsConfig = {
-  origin: (origin: string, callback: (error: Error | null, allow?: boolean) => void) => {
-    const allowedOrigins = [...config.origins]
-
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true)
-    } else {
-      callback(new AppError(HttpStatusCode.FORBIDDEN, 'Not allowed', CommanErrorsDict.notAllowed))
-    }
-  },
-  credentials: true,
-  preflightContinue: false,
-  maxAge: 600,
-}
-
-export const limiter = (maxRequests: number, time: number) => {
-  return rateLimit({
-    max: maxRequests,
-    windowMs: time,
-    standardHeaders: true,
-    legacyHeaders: false,
-    keyGenerator: (req) => {
-      return req.clientIp;
-    },
-    handler: (_, __, ___, options) => {
-      throw new AppError(
-        options.statusCode || HttpStatusCode.INTERNAL_SERVER_ERROR,
-        'Too many request',
-        CommanErrorsDict.tooManyRequests)
-    }
-  })
 }
